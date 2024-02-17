@@ -1,31 +1,6 @@
 import { initialCards } from "./scripts/cards.js";
-// import addIconImage from "./images/add-icon.svg";
-import avatarImage from "./images/avatar.jpg";
-// import card_1Image from "./images/card_1.jpg";
-// import card_2Image from "./images/card_2.jpg";
-// import card_3Image from "./images/card_3.jpg";
-// import closeImage from "./images/close.svg";
-// import deleteIconImage from "./images/delete-icon.svg";
-// import editIconImage from "./images/edit-icon.svg";
-// import likeActiveImage from "./images/like-active.svg";
-// import likeInactiveImage from "./images/like-inactive.svg";
-// import logoImage from "./images/logo.svg";
 
 import "./pages/index.css"; // добавьте импорт главного файла стилей
-
-// const cardsImage = [
-//   { name: "add icon", link: addIconImage },
-//   { name: "avatar", link: avatarImage },
-//   { name: "card 1", link: card_1Image },
-//   { name: "card 2", link: card_2Image },
-//   { name: "card 3", link: card_3Image },
-//   { name: "close", link: closeImage },
-//   { name: "delete icon", link: deleteIconImage },
-//   { name: "edit icon", link: editIconImage },
-//   { name: "like active", link: likeActiveImage },
-//   { name: "like inactive", link: likeInactiveImage },
-//   { name: "logo", link: logoImage },
-// ];
 
 // @todo: Темплейт карточки
 
@@ -71,14 +46,47 @@ cardsContainer.append(...initialCards.map(addCard));
 
 // Модальные окна
 
-const button = document.querySelector(".profile__edit-button");
-const form = document.forms.editProfile; // получаем форму
+const buttonProfile = document.querySelector(".profile__edit-button");
+const buttonNewCard = document.querySelector(".profile__add-button");
 const popupProfile = document.querySelector(".popup_type_edit");
-console.log(popupProfile);
-// const inputName = document.form.name;
-// const inputDescription = document.form.description;
+const popupNewCard = document.querySelector(".popup_type_new-card");
+const popupImage = document.querySelector(".popup_type_image");
+const popupClose = document.querySelector(".popup__close");
+const cardImage = document.querySelector(".card__image");
 
-// вешаем на неё обработчик события submit
-button.addEventListener("click", function (evt) {
-  // popup_is - opened;
+// Открытие модального окна
+buttonProfile.addEventListener("click", function (evt) {
+  popupProfile.classList.add("popup_is-opened");
+});
+
+buttonNewCard.addEventListener("click", function (evt) {
+  popupNewCard.classList.add("popup_is-opened");
+});
+
+cardImage.addEventListener("click", function (evt) {
+  const link = this.src;
+  const name = this.alt;
+  const content = popupImage.querySelector(".popup__image");
+  const description = popupImage.querySelector(".popup__caption");
+
+  popupImage.classList.add("popup_is-opened");
+  content.src = link;
+  content.alt = name;
+  description.textContent = name;
+});
+
+// Закрытие модального окна
+popupProfile.addEventListener("click", function (evt) {
+  const content = this.querySelector(".popup__content");
+  const click = evt.composedPath().includes(content);
+  !click && popupProfile.classList.remove("popup_is-opened");
+});
+
+document.addEventListener("keydown", function (evt) {
+  const isClosed = evt.key === "Escape";
+  isClosed && popupProfile.classList.remove("popup_is-opened");
+});
+
+popupClose.addEventListener("click", function (evt) {
+  popupProfile.classList.remove("popup_is-opened");
 });
