@@ -1,13 +1,13 @@
+import { initialCards } from "../scripts/cards";
+import { cardsContainer, addCard } from "../index";
+
 // Модальные окна
-const formElement = document.querySelector(".popup_type_edit");
-const nameInput = formElement.querySelector(".popup__input_type_name");
-const jobInput = formElement.querySelector(".popup__input_type_description");
+const formEditProfile = document.forms["edit-profile"];
+const formNewPlace = document.forms["new-place"];
+const nameInput = formEditProfile.querySelector(".popup__input_type_name");
+const jobInput = formEditProfile.querySelector(".popup__input_type_description");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
-
-// модалка добавления карточек
-const popupInputName = document.querySelector(".popup__input_type_card-name");
-const popupInputUrl = document.querySelector(".popup__input_type_url");
 
 export function openModal(popup) {
   popup.classList.add("popup_is-opened");
@@ -39,15 +39,31 @@ function closeModalKey(evt) {
   }
 }
 
+// модалка добавления карточек
+const popupInputName = formNewPlace.querySelector(".popup__input_type_card-name");
+const popupInputUrl = formNewPlace.querySelector(".popup__input_type_url");
+
+function attachCard(evt) {
+  evt.preventDefault();
+  const objCard = { name: popupInputName.value, link: popupInputUrl.value };
+  initialCards.unshift(objCard);
+  cardsContainer.prepend(addCard(objCard));
+
+  popupInputName.value = "";
+  popupInputUrl.value = "";
+
+  closeModal(evt, true);
+}
+
+formNewPlace.addEventListener("submit", attachCard);
+
 // Редактирование  профиля
 function handleFormSubmit(evt) {
   evt.preventDefault();
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
 
-  // ПОД ВОПРОСОМ!!! повторение с функцией удаления модалки
-  const openedPopup = document.querySelector(".popup_is-opened");
-  openedPopup.classList.remove("popup_is-opened");
+  closeModal(evt, true);
 }
 
-formElement.addEventListener("submit", handleFormSubmit);
+formEditProfile.addEventListener("submit", handleFormSubmit);

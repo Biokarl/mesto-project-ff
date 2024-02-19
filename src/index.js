@@ -5,7 +5,7 @@ import "./pages/index.css"; // добавьте импорт главного ф
 
 // @todo: DOM узлы
 
-const cardsContainer = document.querySelector(".places__list");
+export const cardsContainer = document.querySelector(".places__list");
 const popupAll = document.querySelectorAll(".popup ");
 
 const buttonProfile = document.querySelector(".profile__edit-button");
@@ -16,7 +16,7 @@ const popupNewCard = document.querySelector(".popup_type_new-card");
 
 // @todo: Функция создания карточки
 
-function addCard(element) {
+export function addCard(element) {
   const item = {
     name: element.name,
     link: element.link,
