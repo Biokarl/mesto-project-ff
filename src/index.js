@@ -40,7 +40,8 @@ buttonNewCard.addEventListener("click", function () {
   openModal(popupNewCard);
 });
 
-//Закрытие оверлей
+//Закрытие оверлей / анимирование попапов
 popupAll.forEach((popup) => {
+  popup.classList.add("popup_is-animated");
   popup.addEventListener("click", closeModal);
 });

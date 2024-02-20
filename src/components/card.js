@@ -1,4 +1,4 @@
-import { openModal } from "./modal";
+import { openModal } from "./modal.js";
 
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector("#card-template").content;
@@ -36,8 +36,8 @@ export function openCard() {
   description.textContent = name;
   openModal(popupImage);
 }
-// @todo: Функция удаления карточки
 
+// @todo: Функция удаления карточки
 export function deleteCard(evt) {
   evt.target.closest(".places__item").remove();
 }

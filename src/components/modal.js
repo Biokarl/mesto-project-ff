@@ -1,5 +1,5 @@
-import { initialCards } from "../scripts/cards";
-import { cardsContainer, addCard } from "../index";
+import { initialCards } from "../scripts/cards.js";
+import { cardsContainer, addCard } from "../index.js";
 
 // Модальные окна
 const formEditProfile = document.forms["edit-profile"];
@@ -8,6 +8,9 @@ const nameInput = formEditProfile.querySelector(".popup__input_type_name");
 const jobInput = formEditProfile.querySelector(".popup__input_type_description");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
+// модалка добавления карточек
+const popupInputName = formNewPlace.querySelector(".popup__input_type_card-name");
+const popupInputUrl = formNewPlace.querySelector(".popup__input_type_url");
 
 export function openModal(popup) {
   popup.classList.add("popup_is-opened");
@@ -39,10 +42,7 @@ function closeModalKey(evt) {
   }
 }
 
-// модалка добавления карточек
-const popupInputName = formNewPlace.querySelector(".popup__input_type_card-name");
-const popupInputUrl = formNewPlace.querySelector(".popup__input_type_url");
-
+// Добавление карточки пользователя
 function attachCard(evt) {
   evt.preventDefault();
   const objCard = { name: popupInputName.value, link: popupInputUrl.value };
