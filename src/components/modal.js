@@ -1,7 +1,6 @@
 import { initialCards } from "../scripts/cards.js";
 import { cardsContainer, addCard } from "../index.js";
 
-// Модальные окна
 const formEditProfile = document.forms["edit-profile"];
 const formNewPlace = document.forms["new-place"];
 const nameInput = formEditProfile.querySelector(".popup__input_type_name");
@@ -26,7 +25,7 @@ export function openModal(popup) {
 export function closeModal(evt, isClosed) {
   const openedPopup = document.querySelector(".popup_is-opened");
   const content = openedPopup.querySelector(".popup__content");
-  const isCloseButton = evt.target.className === "popup__close";
+  const isCloseButton = evt.target.className.includes("popup__close");
   const isHasContent = evt.composedPath().includes(content);
 
   if (!isHasContent || isCloseButton || isClosed) {
