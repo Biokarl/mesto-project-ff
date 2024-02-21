@@ -1,5 +1,3 @@
-import { openModal } from "./modal.js";
-
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector("#card-template").content;
 
@@ -22,21 +20,6 @@ export function createCard(item, { deleteCard, openCard, likeCard }) {
 
 export function likeCard(e) {
   e.target.classList.toggle("card__like-button_is-active");
-}
-
-// Функция открытия карточки
-export function openCard() {
-  const popupImage = document.querySelector(".popup_type_image");
-  const content = popupImage.querySelector(".popup__image");
-  const description = popupImage.querySelector(".popup__caption");
-  const link = this.src;
-  const name = this.alt;
-
-  content.src = link;
-  content.alt = name;
-  description.textContent = name;
-
-  openModal(popupImage);
 }
 
 // @todo: Функция удаления карточки
