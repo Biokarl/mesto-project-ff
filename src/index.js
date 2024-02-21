@@ -4,7 +4,6 @@ import {
   openModal,
   closeModal,
   handleCloseByClick,
-  openProfilePopup,
   formEditProfile,
   popupProfile,
   nameInput,
@@ -25,8 +24,8 @@ const buttonNewCard = document.querySelector(".profile__add-button");
 const popupNewCard = document.querySelector(".popup_type_new-card");
 
 const popupImage = document.querySelector(".popup_type_image");
-const content = popupImage.querySelector(".popup__image");
-const description = popupImage.querySelector(".popup__caption");
+const popupImageContent = popupImage.querySelector(".popup__image");
+const popupImageDescription = popupImage.querySelector(".popup__caption");
 
 // модалка добавления карточек
 const formNewPlace = document.forms["new-place"];
@@ -94,9 +93,17 @@ function openCard(element) {
   const link = element.target.src;
   const name = element.target.alt;
 
-  content.src = link;
-  content.alt = name;
-  description.textContent = name;
+  popupImageContent.src = link;
+  popupImageContent.alt = name;
+  popupImageDescription.textContent = name;
 
   openModal(popupImage);
+}
+
+function openProfilePopup(popup) {
+  // Добавление имени со страницы
+  nameInput.value = profileTitle.textContent;
+  jobInput.value = profileDescription.textContent;
+
+  openModal(popup);
 }

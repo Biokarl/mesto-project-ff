@@ -7,14 +7,6 @@ const profileDescription = document.querySelector(".profile__description");
 
 export { formEditProfile, popupProfile, nameInput, jobInput, profileTitle, profileDescription };
 
-export function openProfilePopup(popup) {
-  // Добавление имени со страницы
-  nameInput.value = profileTitle.textContent;
-  jobInput.value = profileDescription.textContent;
-
-  openModal(popup);
-}
-
 export function openModal(popup) {
   popup.classList.add("popup_is-opened");
 
@@ -28,18 +20,18 @@ export function closeModal(popup) {
 }
 
 export function handleCloseByClick(evt, popup) {
-  const content = popup.querySelector(".popup__content");
-  const isCloseButton = evt.target.className.includes("popup__close");
-  const isHasContent = evt.composedPath().includes(content);
-  if (isCloseButton || !isHasContent) {
+  const isCloseButton = evt.target.classList.contains("popup__close");
+  const isOverlay = evt.target.classList.contains("popup_is-opened");
+
+  if (isCloseButton || isOverlay) {
     closeModal(popup);
   }
 }
 
 function handleCloseByEsc(evt) {
-  const openedPopup = document.querySelector(".popup_is-opened");
   const isEscPressed = evt.key === "Escape";
   if (isEscPressed) {
+    const openedPopup = document.querySelector(".popup_is-opened");
     closeModal(openedPopup);
   }
 }
