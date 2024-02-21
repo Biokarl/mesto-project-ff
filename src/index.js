@@ -3,8 +3,10 @@ import { createCard, deleteCard, likeCard } from "./components/card.js";
 import {
   openModal,
   closeModal,
+  handleCloseByClick,
   openProfilePopup,
   formEditProfile,
+  popupProfile,
   nameInput,
   jobInput,
   profileTitle,
@@ -15,7 +17,7 @@ import "./pages/index.css"; // добавьте импорт главного ф
 // @todo: DOM узлы
 
 export const cardsContainer = document.querySelector(".places__list");
-const popupAll = document.querySelectorAll(".popup ");
+const popups = document.querySelectorAll(".popup ");
 
 const buttonProfile = document.querySelector(".profile__edit-button");
 
@@ -50,17 +52,16 @@ cardsContainer.append(...initialCards.map(addCard));
 // Открытие модальных окон
 
 buttonProfile.addEventListener("click", function () {
-  openProfilePopup();
-  // openModal(popupProfile);
+  openProfilePopup(popupProfile);
 });
 
 buttonNewCard.addEventListener("click", function () {
   openModal(popupNewCard);
 });
 
-//Закрытие оверлей / анимирование попапов
-popupAll.forEach((popup) => {
-  popup.addEventListener("click", closeModal);
+//Закрытие оверлей
+popups.forEach((popup) => {
+  popup.addEventListener("click", (evt) => handleCloseByClick(evt, popup));
 });
 
 // Добавление карточки пользователя
@@ -71,7 +72,7 @@ function handleAddCardFormSubmit(evt) {
 
   formNewPlace.reset();
 
-  closeModal(evt, true);
+  closeModal(popupNewCard);
 }
 
 formNewPlace.addEventListener("submit", handleAddCardFormSubmit);
@@ -83,7 +84,7 @@ function handleEditProfileFormSubmit(evt) {
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
 
-  closeModal(evt, true);
+  closeModal(popupProfile);
 }
 
 formEditProfile.addEventListener("submit", handleEditProfileFormSubmit);
