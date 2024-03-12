@@ -1,4 +1,3 @@
-import { initialCards } from "./scripts/cards.js";
 import { createCard, deleteCard, likeCard } from "./components/card.js";
 import {
   openModal,
@@ -11,8 +10,12 @@ import {
   profileTitle,
   profileDescription,
 } from "./components/modal.js";
+import { getUserInfo, getInitialCards, patchUserInfo, postNewCard } from "./components/api.js";
+import { enableValidation, clearValidation, validationConfig } from "./components/validation.js";
 import "./pages/index.css"; // добавьте импорт главного файла стилей
 
+export let cardId = null;
+export let userID = null;
 // @todo: DOM узлы
 
 export const cardsContainer = document.querySelector(".places__list");
@@ -38,23 +41,24 @@ export function addCard(element) {
   const item = {
     name: element.name,
     link: element.link,
+    likes: element.likes.length,
+    cardId: element._id,
+    userId: element.owner._id,
   };
   const cardElement = createCard(item, { deleteCard, openCard, likeCard });
 
   return cardElement;
 }
 
-// @todo: Вывести карточки на страницу
-
-cardsContainer.append(...initialCards.map(addCard));
-
 // Открытие модальных окон
 
 buttonProfile.addEventListener("click", function () {
+  clearValidation(formEditProfile, validationConfig);
   openProfilePopup(popupProfile);
 });
 
 buttonNewCard.addEventListener("click", function () {
+  clearValidation(formNewPlace, validationConfig);
   openModal(popupNewCard);
 });
 
@@ -67,6 +71,7 @@ popups.forEach((popup) => {
 function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
   const cardData = { name: popupInputName.value, link: popupInputUrl.value };
+  postNewCard(cardData);
   cardsContainer.prepend(addCard(cardData));
 
   formNewPlace.reset();
@@ -82,7 +87,7 @@ function handleEditProfileFormSubmit(evt) {
 
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
-
+  patchUserInfo({ name: nameInput.value, about: jobInput.value });
   closeModal(popupProfile);
 }
 
@@ -107,3 +112,30 @@ function openProfilePopup(popup) {
 
   openModal(popup);
 }
+
+// validation ===============================================
+enableValidation(validationConfig);
+
+//  API =============================================
+
+function initProject() {
+  Promise.all([getInitialCards(), getUserInfo()]).then((res) => {
+    const userInfo = res[1];
+    userID = userInfo._id;
+
+    const avatar = document.querySelector(".profile__image");
+    const profileTitle = document.querySelector(".profile__title");
+    const profileDescription = document.querySelector(".profile__description");
+
+    profileDescription.textContent = userInfo.about;
+    profileTitle.textContent = userInfo.name;
+    avatar.style.backgroundImage = `url("${userInfo.avatar}")`;
+
+    const cards = res[0];
+    let cardId = cards._id;
+
+    cardsContainer.append(...cards.map(addCard));
+  });
+}
+
+initProject();
