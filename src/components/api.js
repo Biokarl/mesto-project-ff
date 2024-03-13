@@ -1,5 +1,5 @@
 const config = {
-  baseUrl: "https://nomoreparties.co/wff-cohort-8",
+  baseUrl: "https://nomoreparties.co/v1/wff-cohort-8",
   headers: {
     authorization: "f4bc8400-a504-4eae-a503-81110307b198",
     "Content-Type": "application/json",
@@ -37,7 +37,7 @@ function getUserInfo() {
 }
 
 function patchUserInfo(data) {
-  fetch(`${config.baseUrl}/users/me`, {
+  return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({
@@ -48,7 +48,7 @@ function patchUserInfo(data) {
 }
 
 function postNewCard(data) {
-  fetch(`${config.baseUrl}/cards`, {
+  return fetch(`${config.baseUrl}/cards`, {
     method: "POST",
     headers: config.headers,
     body: JSON.stringify({
@@ -59,24 +59,45 @@ function postNewCard(data) {
 }
 
 function deleteMyCard(id) {
-  fetch(`${config.baseUrl}/cards/${id}`, {
+  return fetch(`${config.baseUrl}/cards/${id}`, {
     method: "DELETE",
     headers: config.headers,
   });
 }
 
+// Я хз че это значит========================================
+
 function addLikeCard(id) {
-  fetch(`${config.baseUrl}/cards/likes/${id}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     method: "PUT",
     headers: config.headers,
   });
 }
 
 function removeLikeCard(id) {
-  fetch(`${config.baseUrl}/cards/likes/${id}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     method: "DELETE",
     headers: config.headers,
   });
 }
 
-export { getUserInfo, getInitialCards, patchUserInfo, postNewCard, deleteMyCard };
+function changeAvatar(avatar) {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: "PATCH",
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar,
+    }),
+  });
+}
+
+export {
+  getUserInfo,
+  getInitialCards,
+  patchUserInfo,
+  postNewCard,
+  deleteMyCard,
+  addLikeCard,
+  removeLikeCard,
+  changeAvatar,
+};

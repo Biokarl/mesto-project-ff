@@ -20,10 +20,26 @@
       </header>
       <main class="content">
         <section class="profile page__section">
-          <div
-            class="profile__image"
-            style="background-image: url('<%=require(`./images/avatar.jpg`)%>')"
-          ></div>
+          <div class="profile__image-wrapper">
+            <div
+              class="profile__image"
+              style="background-image: url('<%=require(`./images/avatar.jpg`)%>')"
+            ></div>
+            <div class="profile__image-overlay">
+              <svg
+                width="26"
+                height="26"
+                viewBox="0 0 26 26"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M26 3.45351L6.76981 22.7932L3.33585 19.2903L22.517 0L26 3.45351ZM0 26L5.10189 24.4706L1.52075 21.0171L0 26Z"
+                  fill="white"
+                />
+              </svg>
+            </div>
+          </div>
           <div class="profile__info">
             <h1 class="profile__title"></h1>
             <button class="profile__edit-button" type="button"></button>
@@ -116,6 +132,26 @@
           <button type="button" class="popup__close"></button>
           <img src="" alt="" class="popup__image" />
           <p class="popup__caption"></p>
+        </div>
+      </div>
+      <div class="popup popup_type_avatar-update popup_is-animated">
+        <div class="popup__content">
+          <button type="button" class="popup__close"></button>
+          <h3 class="popup__title">Обновить аватар</h3>
+          <form class="popup__form" name="avatar-update" novalidate>
+            <input
+              id="avatar-input"
+              type="url"
+              name="avatar"
+              class="popup__input popup__input_type_avatar-input"
+              placeholder="Ссылка на аватар"
+              pattern="^[https*\:\/\/\s\S]+$"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+              required
+            />
+            <span class="avatar-input-error popup__input-error popup__input-error_active"></span>
+            <button type="submit" class="button popup__button">Сохранить</button>
+          </form>
         </div>
       </div>
     </div>
