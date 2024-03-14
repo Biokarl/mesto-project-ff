@@ -91,12 +91,15 @@ popups.forEach((popup) => {
 // Смена аватара
 function handleProfileForm(evt) {
   evt.preventDefault();
+  renderLoading(true, popupProfileImage);
 
   avatar.style.backgroundImage = `url("${popupInputAvatar.value}")`;
 
-  changeAvatar(popupInputAvatar.value);
-  closeModal(popupProfileImage);
-  formAvatarUpdate.reset();
+  changeAvatar(popupInputAvatar.value).then(() => {
+    closeModal(popupProfileImage);
+    formAvatarUpdate.reset();
+    renderLoading(false, popupProfileImage);
+  });
 }
 
 formAvatarUpdate.addEventListener("submit", handleProfileForm);
@@ -104,16 +107,14 @@ formAvatarUpdate.addEventListener("submit", handleProfileForm);
 // Добавление карточки пользователя
 function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
+  renderLoading(true, popupNewCard);
   const cardData = { name: popupInputName.value, link: popupInputUrl.value };
-  postNewCard(cardData)
-    .then((res) => res.json())
-    .then((res) => {
-      cardsContainer.prepend(addCard(res));
-    });
-
-  formNewPlace.reset();
-
-  closeModal(popupNewCard);
+  postNewCard(cardData).then((res) => {
+    cardsContainer.prepend(addCard(res));
+    closeModal(popupNewCard);
+    formNewPlace.reset();
+    renderLoading(false, popupNewCard);
+  });
 }
 
 formNewPlace.addEventListener("submit", handleAddCardFormSubmit);
@@ -121,11 +122,14 @@ formNewPlace.addEventListener("submit", handleAddCardFormSubmit);
 // Редактирование  профиля
 function handleEditProfileFormSubmit(e) {
   e.preventDefault();
+  renderLoading(true, popupProfile);
 
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
-  patchUserInfo({ name: nameInput.value, about: jobInput.value });
-  closeModal(popupProfile);
+  patchUserInfo({ name: nameInput.value, about: jobInput.value }).then(() => {
+    closeModal(popupProfile);
+    renderLoading(false, popupProfile);
+  });
 }
 
 formEditProfile.addEventListener("submit", handleEditProfileFormSubmit);
@@ -174,3 +178,12 @@ function initProject() {
 }
 
 initProject();
+
+function renderLoading(isLoading, popup) {
+  const btnPopup = popup.querySelector(".popup__button");
+  if (isLoading) {
+    btnPopup.textContent = "Сохранение...";
+  } else if (!isLoading) {
+    btnPopup.textContent = "Сохранить";
+  }
+}

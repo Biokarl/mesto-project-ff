@@ -15,12 +15,21 @@
 }
 
 .popup__button-inactive {
+  border: 1px solid #000;
+  color: #000;
+  background: #fff;
   opacity: 0.2;
 }
 
 .popup__button:hover {
   background: rgba(0, 0, 0, 0.8);
   cursor: pointer;
+}
+
+.popup__button-inactive:hover {
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  cursor: default;
 }
 
 @media screen and (max-width: 568px) {

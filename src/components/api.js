@@ -44,7 +44,16 @@ function patchUserInfo(data) {
       name: data.name,
       about: data.about,
     }),
-  });
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 function postNewCard(data) {
@@ -55,30 +64,64 @@ function postNewCard(data) {
       name: data.name,
       link: data.link,
     }),
-  });
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 function deleteMyCard(id) {
   return fetch(`${config.baseUrl}/cards/${id}`, {
     method: "DELETE",
     headers: config.headers,
-  });
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
-
-// Я хз че это значит========================================
 
 function addLikeCard(id) {
   return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     method: "PUT",
     headers: config.headers,
-  });
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 function removeLikeCard(id) {
   return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     method: "DELETE",
     headers: config.headers,
-  });
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 function changeAvatar(avatar) {
@@ -88,7 +131,16 @@ function changeAvatar(avatar) {
     body: JSON.stringify({
       avatar,
     }),
-  });
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 export {

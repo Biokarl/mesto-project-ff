@@ -35,17 +35,13 @@ export function likeCard(e, id) {
   const wrap = e.target.closest(".wrap");
   const counterLike = wrap.querySelector(".counter__like");
   if (e.target.classList.contains("card__like-button_is-active")) {
-    removeLikeCard(id)
-      .then((res) => res.json())
-      .then((res) => {
-        counterLike.textContent = res.likes.length;
-      });
+    removeLikeCard(id).then((res) => {
+      counterLike.textContent = res.likes.length;
+    });
   } else {
-    addLikeCard(id)
-      .then((res) => res.json())
-      .then((res) => {
-        counterLike.textContent = res.likes.length;
-      });
+    addLikeCard(id).then((res) => {
+      counterLike.textContent = res.likes.length;
+    });
   }
 
   e.target.classList.toggle("card__like-button_is-active");
