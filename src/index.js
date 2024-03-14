@@ -1,15 +1,5 @@
 import { createCard, deleteCard, likeCard } from "./components/card.js";
-import {
-  openModal,
-  closeModal,
-  handleCloseByClick,
-  formEditProfile,
-  popupProfile,
-  nameInput,
-  jobInput,
-  profileTitle,
-  profileDescription,
-} from "./components/modal.js";
+import { openModal, closeModal, handleCloseByClick } from "./components/modal.js";
 import {
   getUserInfo,
   getInitialCards,
@@ -20,10 +10,16 @@ import {
 import { enableValidation, clearValidation, validationConfig } from "./components/validation.js";
 import "./pages/index.css"; // добавьте импорт главного файла стилей
 
-export let userID = null;
 // @todo: DOM узлы
 
-export const cardsContainer = document.querySelector(".places__list");
+const formEditProfile = document.forms["edit-profile"];
+const popupProfile = document.querySelector(".popup_type_edit");
+const nameInput = formEditProfile.querySelector(".popup__input_type_name");
+const jobInput = formEditProfile.querySelector(".popup__input_type_description");
+const profileTitle = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
+
+const cardsContainer = document.querySelector(".places__list");
 const popups = document.querySelectorAll(".popup ");
 
 const avatar = document.querySelector(".profile__image");
@@ -93,13 +89,19 @@ function handleProfileForm(evt) {
   evt.preventDefault();
   renderLoading(true, popupProfileImage);
 
-  avatar.style.backgroundImage = `url("${popupInputAvatar.value}")`;
+  changeAvatar(popupInputAvatar.value)
+    .then(() => {
+      closeModal(popupProfileImage);
 
-  changeAvatar(popupInputAvatar.value).then(() => {
-    closeModal(popupProfileImage);
-    formAvatarUpdate.reset();
-    renderLoading(false, popupProfileImage);
-  });
+      avatar.style.backgroundImage = `url("${popupInputAvatar.value}")`;
+      formAvatarUpdate.reset();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoading(false, popupProfileImage);
+    });
 }
 
 formAvatarUpdate.addEventListener("submit", handleProfileForm);
@@ -109,12 +111,18 @@ function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
   renderLoading(true, popupNewCard);
   const cardData = { name: popupInputName.value, link: popupInputUrl.value };
-  postNewCard(cardData).then((res) => {
-    cardsContainer.prepend(addCard(res));
-    closeModal(popupNewCard);
-    formNewPlace.reset();
-    renderLoading(false, popupNewCard);
-  });
+  postNewCard(cardData)
+    .then((res) => {
+      cardsContainer.prepend(addCard(res));
+      closeModal(popupNewCard);
+      formNewPlace.reset();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoading(false, popupNewCard);
+    });
 }
 
 formNewPlace.addEventListener("submit", handleAddCardFormSubmit);
@@ -124,12 +132,18 @@ function handleEditProfileFormSubmit(e) {
   e.preventDefault();
   renderLoading(true, popupProfile);
 
-  profileTitle.textContent = nameInput.value;
-  profileDescription.textContent = jobInput.value;
-  patchUserInfo({ name: nameInput.value, about: jobInput.value }).then(() => {
-    closeModal(popupProfile);
-    renderLoading(false, popupProfile);
-  });
+  patchUserInfo({ name: nameInput.value, about: jobInput.value })
+    .then(() => {
+      profileTitle.textContent = nameInput.value;
+      profileDescription.textContent = jobInput.value;
+      closeModal(popupProfile);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoading(false, popupProfile);
+    });
 }
 
 formEditProfile.addEventListener("submit", handleEditProfileFormSubmit);
@@ -160,21 +174,23 @@ enableValidation(validationConfig);
 //  API =============================================
 
 function initProject() {
-  Promise.all([getInitialCards(), getUserInfo()]).then((res) => {
-    const userInfo = res[1];
-    userID = userInfo._id;
+  Promise.all([getInitialCards(), getUserInfo()])
+    .then((res) => {
+      const userInfo = res[1];
+      let userId = userInfo._id;
+      localStorage.setItem("userId", JSON.stringify(userId));
 
-    const profileTitle = document.querySelector(".profile__title");
-    const profileDescription = document.querySelector(".profile__description");
+      profileDescription.textContent = userInfo.about;
+      profileTitle.textContent = userInfo.name;
+      avatar.style.backgroundImage = `url("${userInfo.avatar}")`;
 
-    profileDescription.textContent = userInfo.about;
-    profileTitle.textContent = userInfo.name;
-    avatar.style.backgroundImage = `url("${userInfo.avatar}")`;
+      const cards = res[0];
 
-    const cards = res[0];
-
-    cardsContainer.append(...cards.map(addCard));
-  });
+      cardsContainer.append(...cards.map(addCard));
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 initProject();
